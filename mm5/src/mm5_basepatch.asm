@@ -538,7 +538,10 @@ EnergylinkOneUp:
     CMP     #$09
     JMP     $AED2
 
-
+%org($FD90, $1F)
+db "MM5_ARCHIPELAGO_BASE", $00
+db $00 ; deathlink
+db $FF, $FF, $FF ; world version
 
 
 %org($FDE7, $1F)

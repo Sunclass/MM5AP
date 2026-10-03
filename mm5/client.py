@@ -291,7 +291,7 @@ class MegaMan5Client(BizHawkClient):
 
         try:
 
-            if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x7FFF0:
+            if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFF0:
                 # not the entire size, but enough to check validation
                 if "pool" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("pool")
@@ -301,8 +301,8 @@ class MegaMan5Client(BizHawkClient):
                     ctx.command_processor.commands.pop("autoheal")
                 return False
 
-            game_name, version = (await read(ctx.bizhawk_ctx, [(0x7EF00, 21, "PRG ROM"),
-                                                               (0x7EF16, 3, "PRG ROM")]))
+            game_name, version = (await read(ctx.bizhawk_ctx, [(0x3DF90, 21, "PRG ROM"),
+                                                               (0x3DFA6, 3, "PRG ROM")]))
             if game_name[:3] != b"MM5" or version != bytes(MM5World.world_version):
                 if game_name[:3] == b"MM5":
                     # I think this is an easier check than the other?
@@ -327,7 +327,7 @@ class MegaMan5Client(BizHawkClient):
         self.rom = game_name
         ctx.items_handling = 0b111
         ctx.want_slot_data = False
-        deathlink = (await read(ctx.bizhawk_ctx, [(0x7EF15, 1, "PRG ROM")]))[0][0]
+        deathlink = (await read(ctx.bizhawk_ctx, [(0x3DFA5, 1, "PRG ROM")]))[0][0]
         if deathlink & 0x01:
             self.death_link = True
             await ctx.update_death_link(self.death_link)
