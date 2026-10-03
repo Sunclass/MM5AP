@@ -8,13 +8,13 @@ from worlds.AutoWorld import World, WebWorld
 from .color import check_for_known_worlds
 from .items import (item_table, item_names, MM5Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, extra_item_table, lookup_item_to_id)
-from .locations import (MM5Location, MM5_regions, MM5Region, lookup_location_to_id,
+from .locations import (MM5Location, mm5_regions, MM5Region, lookup_location_to_id,
                         location_groups)
-from .names import (wily_4_boss, charge_buster, bright_man_stage, toad_man_stage, drill_man_stage, pharaoh_man_stage,
-                    ring_man_stage, dust_man_stage, dive_man_stage, skull_man_stage)
+from .names import (wily_4_boss, charge_buster, gravity_man_stage, wave_man_stage, stone_man_stage, gyro_man_stage,
+                    star_man_stage, charge_man_stage, napalm_man_stage, crystal_man_stage)
 from .rom import patch_rom, MM5ProcedurePatch, MM5LCHASH, MM5VCHASH, PROTEUSHASH, MM5NESHASH
 from .options import MM5Options, Consumables
-from .client import MegaMan4Client
+from .client import MegaMan5Client
 from .rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
 import threading
@@ -105,7 +105,7 @@ class MM5World(World):
         menu = MM5Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
         location: MM5Location
-        for name, region in MM5_regions.items():
+        for name, region in mm5_regions.items():
             stage = MM5Region(name, self.player, self.multiworld)
             if not region.parent:
                 menu.connect(stage, f"To {name}")
@@ -171,14 +171,14 @@ class MM5World(World):
         if self.options.consumables:
             return  # The only affected stages have both types of consumable
         rbm_to_item = {
-            0: bright_man_stage,
-            1: toad_man_stage,
-            2: drill_man_stage,
-            3: pharaoh_man_stage,
-            4: ring_man_stage,
-            5: dust_man_stage,
-            6: dive_man_stage,
-            7: skull_man_stage
+            0: gravity_man_stage,
+            1: wave_man_stage,
+            2: stone_man_stage,
+            3: gyro_man_stage,
+            4: star_man_stage,
+            5: charge_man_stage,
+            6: napalm_man_stage,
+            7: crystal_man_stage
         }
         affected_rbm = [0, 4, 5, 7]
         possible_rbm = [1, 2, 3, 6]  # Marine/Jet/Balloon/Wire respectively

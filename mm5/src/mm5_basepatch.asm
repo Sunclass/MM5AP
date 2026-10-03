@@ -65,7 +65,7 @@ endmacro
 
 org 6
 ; We need to edit the NES 2.0 header here too
-db $40, $08, $00, $00, $07, $07, $00, $00, $00, $01
+db $40, $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 ;%org($80C0, $01)
     ;JMP     WeaponSoftlock

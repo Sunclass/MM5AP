@@ -45,7 +45,7 @@ mm5_regions: dict[str, RegionData] = {
 
     "Stone Man Stage": RegionData({
         names.stone_man: LocationData(0x0003),
-        names.get_stone_bomb: LocationData(0x0103),
+        names.get_power_stone: LocationData(0x0103),
         names.get_rush_jet: LocationData(0x0112),
         names.stone_man_c1: LocationData(0x0207, energy=True),
         names.stone_man_c2: LocationData(0x0208, energy=True),
@@ -60,7 +60,7 @@ mm5_regions: dict[str, RegionData] = {
 
     "Gyro Man Stage": RegionData({
         names.gyro_man: LocationData(0x0004),
-        names.get_gyro_shot: LocationData(0x0104),
+        names.get_gyro_attack: LocationData(0x0104),
         names.gyro_man_c1: LocationData(0x020F, energy=True),
         names.gyro_man_c2: LocationData(0x0210, energy=True),
         names.gyro_man_c3: LocationData(0x0211, oneup_tank=True),
@@ -69,7 +69,7 @@ mm5_regions: dict[str, RegionData] = {
 
     "Star Man Stage": RegionData({
         names.star_man: LocationData(0x0005),
-        names.get_star_boomerang: LocationData(0x0105),
+        names.get_star_crash: LocationData(0x0105),
         names.get_super_arrow: LocationData(0x0113),
         names.star_man_c1: LocationData(0x0213, energy=True),
         names.star_man_c2: LocationData(0x0214,oneup_tank = True, energy = True),
@@ -77,13 +77,13 @@ mm5_regions: dict[str, RegionData] = {
 
     "Charge Man Stage": RegionData({
         names.charge_man: LocationData(0x0006),
-        names.get_charge_crusher: LocationData(0x0106),
+        names.get_charge_kick: LocationData(0x0106),
         names.charge_man_c1: LocationData(0x0215,oneup_tank = True, energy = True),
     }, [names.charge_man_stage], []),
 
     "Napalm Man Stage": RegionData({
         names.napalm_man: LocationData(0x0007),
-        names.get_napalm_missile: LocationData(0x0107),
+        names.get_napalm_bomb: LocationData(0x0107),
         names.napalm_man_c1: LocationData(0x0216, energy=True),
         names.napalm_man_c2: LocationData(0x0217, oneup_tank=True),
         #names.napalm_man_c3: LocationData(0x0219, oneup_tank = True, eddie=True),
@@ -93,7 +93,7 @@ mm5_regions: dict[str, RegionData] = {
 
     "Crystal Man Stage": RegionData({
         names.crystal_man: LocationData(0x0008),
-        names.get_crystal_barrier: LocationData(0x0108),
+        names.get_crystal_eye: LocationData(0x0108),
         #names.crystal_man_c1: LocationData(0x021C, oneup_tank = True, eddie=True),
         names.crystal_man_c2: LocationData(0x021A, oneup_tank=True),
         names.crystal_man_c3: LocationData(0x021B, oneup_tank=True),

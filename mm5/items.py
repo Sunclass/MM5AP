@@ -4,7 +4,7 @@ from .names import (gravity_hold, water_wave, power_stone, gyro_attack, star_cra
                     crystal_eye, rush_coil, rush_jet, super_arrow, beat, charge_buster,
                     gravity_man_stage, wave_man_stage, stone_man_stage, gyro_man_stage, star_man_stage,
                     charge_man_stage, napalm_man_stage, crystal_man_stage, proto_man_1_stage, proto_man_2_stage, proto_man_3_stage,
-                    proto_man_4_stage, e_tank, m_tank, weapon_energy, health_energy, one_up)
+                    proto_man_4_stage, e_tank, weapon_energy, health_energy, one_up)
 
 
 class ItemData(NamedTuple):
@@ -57,7 +57,6 @@ filler_item_table = {
     weapon_energy: ItemData(0x0021, False),
     health_energy: ItemData(0x0022, False),
     e_tank: ItemData(0x0023, False, True),
-    m_tank: ItemData(0x0024, False, True),
 }
 
 
@@ -67,7 +66,6 @@ filler_item_weights = {
     weapon_energy: 4,
     health_energy: 1,
     e_tank: 2,
-    m_tank: 5,
 }
 
 item_table = {
@@ -81,7 +79,6 @@ item_names = {
     "Weapons": {name for name in robot_master_weapon_table.keys()},
     "Stages": {name for name in stage_access_table.keys()},
     "Rush": {name for name in extra_item_table.keys() if "Rush" in name},
-    "Plates": {name for name in plates_table.keys()}
 }
 
 lookup_item_to_id: dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}

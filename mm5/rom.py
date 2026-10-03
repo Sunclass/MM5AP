@@ -13,14 +13,15 @@ from .options import MusicShuffle
 if TYPE_CHECKING:
     from . import MM5World
 
-MM5LCHASH = "0f15c1e95fae2f0ee97e2f5ff50b86a8"
-PROTEUSHASH = "7d6438848d5b88c743818e5473fcda0a"
-MM5NESHASH = "5da5deec7647895029a174092b3f1e1a"
-MM5VCHASH = "5da5deec7647895029a174092b3f1e1a"
+MM5LCHASH = "0292adc9e38e77687f5d09718a768b45"
+PROTEUSHASH = "0292adc9e38e77687f5d09718a768b45"
+MM5NESHASH = "4482fbbbc77e03266b979f5028d4b51d"
+MM5VCHASH = "8453ea3f3096412bff739d48aa386146"
 
 ENERGYLINK = 0x3AA90
 WILY3REQ = 0x163D0
 JAMMED = 0x37E80
+MTANKS = 0X3AE07
 
 enemy_ids: dict[str, int] = {
     # these are Object IDs in the Matrixz doc
@@ -116,7 +117,7 @@ class MM5ProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".nes"
     name: bytearray
     procedure = [
-        ("apply_bsdiff5", ["mm5_basepatch.bsdiff4"]),
+        ("apply_bsdiff4", ["mm5_basepatch.bsdiff4"]),
         ("apply_tokens", ["token_patch.bin"]),
     ]
 
@@ -255,7 +256,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
-header = b"\x4E\x45\x53\x1A\x10\x20\x40\x08\x00\x00\x00\x07\x00\x00\x00\x01"
+header = b"\x4E\x45\x53\x1A\x10\x20\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 def read_headerless_nes_rom(rom: bytes) -> bytes:
