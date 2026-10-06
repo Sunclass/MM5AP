@@ -49,12 +49,12 @@ weapons_to_id: dict[str, int] = {
 
 weapon_damage: dict[int, list[int]] = {
     0: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Mega Buster
-    1: [0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, ],  # Gravity Hold
+    1: [1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, ],  # Gravity Hold
     2: [1, 1, 1, 1, 4, 1, 1, 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, ],  # Water Wave
     3: [1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 0, ],  # Power Stone
     4: [1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 2, 1, 1, 4, 1, 1, 1, ],  # Gyro Attack
     5: [4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 4, 1, 1, ],  # Star Crash
-    6: [1, 4, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, ],  # Charge Kick
+    6: [1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, ],  # Charge Kick
     7: [1, 1, 4, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, ],  # Napalm Bomb
     8: [1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 4, 1, 1, 1, 1, ],  # Crystal Eye
     9: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Rush Coil
@@ -242,18 +242,23 @@ def set_rules(world: "MM5World") -> None:
 
         if world.options.strict_weakness:
             for weapon in weapon_damage:
+                print(f"{world.weapon_damage}")
                 for i in range(16):
+                    print(f"i = {i}")
                     if weapon > 8 and not world.options.random_rush:
                         continue
                     if weapon == 0:
                         world.weapon_damage[weapon][i] = 0
-                    elif i in (14, 15) and not world.options.random_weakness:
+                    elif i in (6,8,14, 15) and not world.options.random_weakness:
                         if 3 > world.weapon_damage[weapon][i] > 0:
+                            # Phase 1 takes 3 max
+                            world.weapon_damage[weapon][i] = 0
+                    elif i in (9,10,11) and not world.options.random_weakness:
+                        if 2 > world.weapon_damage[weapon][i] > 0:
                             # Phase 1 takes 3 max
                             world.weapon_damage[weapon][i] = 0
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
-
         for p_boss in world.options.plando_weakness:
             for p_weapon in world.options.plando_weakness[p_boss]:
                 if not any(w for w in world.weapon_damage
@@ -374,6 +379,7 @@ def set_rules(world: "MM5World") -> None:
             continue  # this can always be in logic
         weapons = []
         for weapon in range(1, 9 if not world.options.random_rush else 13):
+            print(f"boss = {i} weapon = {weapon}")
             if world.weapon_damage[weapon][i] > 0:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue

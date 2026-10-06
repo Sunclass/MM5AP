@@ -290,19 +290,20 @@ class MegaMan5Client(BizHawkClient):
         from . import MM5World
 
         try:
-
             if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFF0:
                 # not the entire size, but enough to check validation
                 if "pool" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("pool")
                 if "request" in ctx.command_processor.commands:
-                    ctx.command_processor.commands.pop("request")
+                    ctx.command_processor.commands.pop("request")                    
                 if "autoheal" in ctx.command_processor.commands:
-                    ctx.command_processor.commands.pop("autoheal")
+                    ctx.command_processor.commands.pop("autoheal")     
                 return False
-
-            game_name, version = (await read(ctx.bizhawk_ctx, [(0x3DF90, 21, "PRG ROM"),
-                                                               (0x3DFA6, 3, "PRG ROM")]))
+            a = (await read(ctx.bizhawk_ctx, [(0x3DFA0, 21, "PRG ROM"),
+                                            (0x3DFB6, 3, "PRG ROM")]))
+            logger.warning({a[0]})
+            game_name, version = (await read(ctx.bizhawk_ctx, [(0x3FD90, 21, "PRG ROM"),
+                                                               (0x3FDA6, 3, "PRG ROM")]))
             if game_name[:3] != b"MM5" or version != bytes(MM5World.world_version):
                 if game_name[:3] == b"MM5":
                     # I think this is an easier check than the other?
@@ -319,8 +320,10 @@ class MegaMan5Client(BizHawkClient):
                     ctx.command_processor.commands.pop("autoheal")
                 return False
         except UnicodeDecodeError:
+            logger.warning("Unicode Decode Error.")
             return False
         except RequestFailedError:
+            logger.warning("RequestFailedError.")
             return False  # Should verify on the next pass
 
         ctx.game = self.game

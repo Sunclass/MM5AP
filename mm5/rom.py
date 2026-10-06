@@ -75,7 +75,7 @@ enemy_ids: dict[str, int] = {
     "Stone Man": 0x69,
     "Charge Man": 0x6B,
     "Gyro Man": 0x6E,
-    "CircRing Q9": 0x7C,
+    "Circring Q9": 0x7C,
     "Gravity Man": 0x81,
     "Crystal Man": 0x83,
     "Wave Man": 0x86,
@@ -212,11 +212,11 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
     patch.name = bytearray(f'MM5{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
-    patch.write_bytes(0x7EF10, patch.name)
+    patch.write_bytes(0x3FDA0, patch.name)
     deathlink_byte = world.options.death_link.value | (world.options.energy_link.value << 1)
-    patch.write_byte(0x7EF25, deathlink_byte)
+    patch.write_byte(0x3FDB5, deathlink_byte)
 
-    patch.write_bytes(0x7EF26, world.world_version)
+    patch.write_bytes(0x3FDB6, world.world_version)
 
     version_map = {
         "0": 0x18,
@@ -232,26 +232,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
         ".": 0x24
     }
 
-    # SUNCLASS & SILVRIS
-    author = bytearray([0x1C, 0x12, 0x15, 0x1F, 0x1B, 0x12, 0x1C, 0x00])
-    # ARCHIPELAGO x.x.x
-    ap_version = bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            0x0A, 0x1B, 0x0C, 0x11, 0x12, 0x19, 0x0E, 0x15, 0x0A, 0x10, 0x18, 0x00])
-    ap_version.extend(list(map(lambda c: version_map[c], __version__)))
-    if len(ap_version) % 2 == 1:
-        ap_version.append(0)
-    # just when you think you've seen it all
-    group_1 = bytearray()
-    group_2 = bytearray()
-    for i in range(0, len(author), 2):
-        group_1.append(author[i])
-        group_2.append(author[i + 1])
-
-    for i in range(0, len(ap_version), 2):
-        group_1.append(ap_version[i])
-        group_2.append(ap_version[i + 1])
-    patch.write_bytes(0x60280, group_1)
-    patch.write_bytes(0x60380, group_2)
+    
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
