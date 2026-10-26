@@ -75,7 +75,7 @@ enemy_ids: dict[str, int] = {
     "Stone Man": 0x69,
     "Charge Man": 0x6B,
     "Gyro Man": 0x6E,
-    "Circring Q9": 0x7C,
+    "CircRing Q9": 0x7C,
     "Gravity Man": 0x81,
     "Crystal Man": 0x83,
     "Wave Man": 0x86,
@@ -180,7 +180,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
     # music shuffle
     if world.options.music_shuffle:
         if world.options.music_shuffle == MusicShuffle.option_no_music:
-            pool = [0xF0] * 24
+            pool = [0xF0] * 25
             patch.write_byte(0x18011, 0xF0)  # intro 0B
             patch.write_byte(0x2E09D, 0xF0)  # Title Screen 49
             patch.write_byte(0x36B17, 0xF0)  # Stage Clear 11
@@ -192,7 +192,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
             patch.write_byte(0x2E28A, 0xF0)  # Boss Select 0E
         elif world.options.music_shuffle == MusicShuffle.option_randomized:
             pool = world.random.choices([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xB, 0x13,
-                                         0xD, 0xA, 0x49, 0xC, 0x14, 0x08, 0x09, 0x16], k=24)
+                                         0xD, 0xA, 0x49, 0xC, 0x14, 0x08, 0x09, 0x16], k=25)
         else:
             pool = [0, 1, 2, 3, 4, 5, 6, 7, 8, 1, 3, 7, 8, 9, 9, 0x14, 0x16, 0x49, 0xD, 0xA, 0x13, 0xB, 0x09, 0xC,0xB]
         world.random.shuffle(pool)
