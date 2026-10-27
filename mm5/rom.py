@@ -75,7 +75,7 @@ enemy_ids: dict[str, int] = {
     "Stone Man": 0x69,
     "Charge Man": 0x6B,
     "Gyro Man": 0x6E,
-    "CircRing Q9": 0x7C,
+    "Circring Q9": 0x7C,
     "Gravity Man": 0x81,
     "Crystal Man": 0x83,
     "Wave Man": 0x86,
@@ -163,6 +163,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
         for weapon in enemy_weakness_ptrs:
             if damage[weapon] < 0:
                 damage[weapon] = 0
+            print(f"weapon = {weapon}, enemy = {enemy}")
             patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_ids[enemy], damage[weapon])
 
 
