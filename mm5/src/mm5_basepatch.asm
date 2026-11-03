@@ -1,6 +1,7 @@
 norom
 !headersize = 16
 
+
 !controller_flip = $14 ; only on first frame of input, used by crash man, etc
 !controller_mirror = $16
 !vram_toggle = $19
@@ -289,7 +290,7 @@ StageSelectLoopHook:
     STA     $10 
     LDA     #$02
     STA     $23
-    JSR     $80E1
+    JMP     $80E1
     ;BEQ     .Return
     .Return:
     JMP     $8149
