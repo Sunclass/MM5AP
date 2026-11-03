@@ -144,7 +144,7 @@ Wily3Requirement:
 
 %org($8142, $17)
     AND     #$B0
-%org($8146, $17)
+%org($8140, $17)
     JMP     StageSelectLoopHook
 
 %org($81D7, $17)
@@ -289,8 +289,8 @@ StageSelectLoopHook:
     STA     $10 
     LDA     #$02
     STA     $23
-    JSR     $DAFC
-    BEQ     .Return
+    JSR     $80E1
+    ;BEQ     .Return
     .Return:
     JMP     $8149
 

@@ -56,7 +56,7 @@ weapon_damage: dict[int, list[int]] = {
     5: [4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 4, 1, 1, ],  # Star Crash
     6: [1, 4, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, ],  # Charge Kick
     7: [1, 1, 4, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, ],  # Napalm Bomb
-    8: [1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 4, 1, 1, 1, 1, ],  # Crystal Eye
+    8: [1, 1, 1, 1, 1, 1, 4, 1, 1, 2, 1, 1, 4, 1, 1, 1, 1, ],  # Crystal Eye
     9: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Rush Coil
     10: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Rush Jet
     11: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 4, 1, ],  # Super Arrow
@@ -247,6 +247,12 @@ def set_rules(world: "MM5World") -> None:
                         continue
                     if weapon == 0:
                         world.weapon_damage[weapon][i] = 0
+                    elif i == 8 and not world.options.random_weakness:
+                        if 3 > world.weapon_damage[weapon][i] > 0:
+                            world.weapon_damage[weapon][i] = 0
+                    elif i in (9,10,11) and not world.options.random_weakness:
+                        if 2 > world.weapon_damage[weapon][i] > 0:
+                            world.weapon_damage[weapon][i] = 0                            
                     elif i in (14, 15) and not world.options.random_weakness:
                         if 3 > world.weapon_damage[weapon][i] > 0:
                             # Phase 1 takes 3 max
@@ -352,6 +358,8 @@ def set_rules(world: "MM5World") -> None:
 
     location_rules: dict[str, Rule] = {}
 
+    print(f"List of weapon damage : {world.weapon_damage}")
+
     for i, boss_locations in zip([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16], [
         get_boss_locations("Gravity Man Stage"),
         get_boss_locations("Wave Man Stage"),
@@ -370,14 +378,17 @@ def set_rules(world: "MM5World") -> None:
         get_boss_locations("Wily Stage 3"),
         get_boss_locations("Wily Stage 4")
     ]):
+        print(f"current boss = {i}")
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
         weapons = []
         for weapon in range(1, 9 if not world.options.random_rush else 13):
+            print(f"Weapon = {weapon}")
             if world.weapon_damage[weapon][i] > 0:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue
                 weapons.append(weapons_to_name[weapon])
+                print(f"Weapon name is {weapons_to_name[weapon]}")
             if i == 14:
                 if world.weapon_damage[weapon][i+1] > 0:
                     if world.weapon_damage[weapon][i+1] < minimum_weakness_requirement[weapon]:
