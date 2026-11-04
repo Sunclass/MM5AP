@@ -224,10 +224,11 @@ def set_rules(world: "MM5World") -> None:
             for i in range(1, 9 if not world.options.random_rush else 13):
                 world.weapon_damage[i] = weapon_tables.pop()
         elif world.options.random_weakness == world.options.random_weakness.option_randomized:
-            world.weapon_damage = {i: [] for i in range(9 if not world.options.random_rush else 11)}
+            world.weapon_damage = {i: [] for i in range(9 if not world.options.random_rush else 13)}
             for boss in range(16):
                 for weapon in world.weapon_damage:
                     world.weapon_damage[weapon].append(min(14, max(0, int(world.random.normalvariate(3, 3)))))
+                print(f"List of weapon damage : {world.weapon_damage}")
                 if not any([world.weapon_damage[weapon][boss] >= 4
                             for weapon in range(1, 9 if not world.options.random_rush else 13)]):
                     # failsafe, there should be at least one defined non-Buster weakness
@@ -358,7 +359,6 @@ def set_rules(world: "MM5World") -> None:
 
     location_rules: dict[str, Rule] = {}
 
-    print(f"List of weapon damage : {world.weapon_damage}")
 
     for i, boss_locations in zip([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16], [
         get_boss_locations("Gravity Man Stage"),
@@ -378,17 +378,14 @@ def set_rules(world: "MM5World") -> None:
         get_boss_locations("Wily Stage 3"),
         get_boss_locations("Wily Stage 4")
     ]):
-        print(f"current boss = {i}")
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
         weapons = []
         for weapon in range(1, 9 if not world.options.random_rush else 13):
-            print(f"Weapon = {weapon}")
             if world.weapon_damage[weapon][i] > 0:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue
                 weapons.append(weapons_to_name[weapon])
-                print(f"Weapon name is {weapons_to_name[weapon]}")
             if i == 14:
                 if world.weapon_damage[weapon][i+1] > 0:
                     if world.weapon_damage[weapon][i+1] < minimum_weakness_requirement[weapon]:
