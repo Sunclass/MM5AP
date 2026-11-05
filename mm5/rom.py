@@ -163,7 +163,6 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
         for weapon in enemy_weakness_ptrs:
             if damage[weapon] < 0:
                 damage[weapon] = 0
-            print(f"weapon = {weapon}, enemy = {enemy}")
             patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_ids[enemy], damage[weapon])
 
 
@@ -173,7 +172,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
 
 # To Make sure you can have more than one M-Tank to not despawn them
 
-    patch.write_byte(MTANKS, 0x89)
+    patch.write_byte(MTANKS, 0xB9)
     patch.write_byte(MTANKS + 1, 0x90)
 
     write_palette_shuffle(world, patch)

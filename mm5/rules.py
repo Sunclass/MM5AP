@@ -8,6 +8,7 @@ from . import names
 from .locations import get_boss_locations, mm5_regions
 from rule_builder.rules import CanReachLocation, HasAll, HasAny, Has, OptionFilter, Rule, True_, TWorld
 
+
 if TYPE_CHECKING:
     from . import MM5World
 
@@ -228,7 +229,6 @@ def set_rules(world: "MM5World") -> None:
             for boss in range(16):
                 for weapon in world.weapon_damage:
                     world.weapon_damage[weapon].append(min(14, max(0, int(world.random.normalvariate(3, 3)))))
-                print(f"List of weapon damage : {world.weapon_damage}")
                 if not any([world.weapon_damage[weapon][boss] >= 4
                             for weapon in range(1, 9 if not world.options.random_rush else 13)]):
                     # failsafe, there should be at least one defined non-Buster weakness
@@ -260,6 +260,29 @@ def set_rules(world: "MM5World") -> None:
                             world.weapon_damage[weapon][i] = 0
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
+            #Fail safe
+            strict_weakness_table : list = {i: [] for i in range(16)}
+            for i in range(16):
+                for weapon in range(1,9 if not world.options.random_rush else 13):
+                    if weapon == 0:
+                        continue
+                    if world.weapon_damage[weapon][i] in (3, 4):
+                        strict_weakness_table[i] = weapon
+                #Check if there's any weapon left
+                if strict_weakness_table[i] == []:
+                    for weapon in range(1,9 if not world.options.random_rush else 13):
+                        if weapon not in strict_weakness_table:
+                            world.weapon_damage[weapon][i] = 4
+                #Insert a random weapon to the table
+                if strict_weakness_table[i] == []:
+                    weapon = world.random.randint(1, 8 if not world.options.random_rush else 12)
+                    world.weapon_damage[weapon][i] = 4
+
+                
+
+
+
+
 
         for p_boss in world.options.plando_weakness:
             for p_weapon in world.options.plando_weakness[p_boss]:
@@ -358,7 +381,6 @@ def set_rules(world: "MM5World") -> None:
             world.wily_3_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
 
     location_rules: dict[str, Rule] = {}
-
 
     for i, boss_locations in zip([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16], [
         get_boss_locations("Gravity Man Stage"),
