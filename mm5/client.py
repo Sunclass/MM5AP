@@ -339,7 +339,6 @@ class MegaMan5Client(BizHawkClient):
         if deathlink & 0x02:
             self.energy_link = True
 
-        logger.warning(f"energylink : {self.energy_link} , deathlink : {deathlink}")
         if self.energy_link:
             if "pool" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["pool"] = cmd_pool
