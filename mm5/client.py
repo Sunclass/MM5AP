@@ -290,6 +290,7 @@ class MegaMan5Client(BizHawkClient):
         from . import MM5World
 
         try:
+            c = await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")
             if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFF0:
                 # not the entire size, but enough to check validation
                 if "pool" in ctx.command_processor.commands:
@@ -297,14 +298,14 @@ class MegaMan5Client(BizHawkClient):
                 if "request" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("request")                    
                 if "autoheal" in ctx.command_processor.commands:
-                    ctx.command_processor.commands.pop("autoheal")     
-                return False
+                    ctx.command_processor.commands.pop("autoheal") 
+                return False 
             a = (await read(ctx.bizhawk_ctx, [(0x3DFA0, 21, "PRG ROM"),
                                             (0x3DFB6, 3, "PRG ROM")]))
-            logger.warning({a[0]})
             game_name, version = (await read(ctx.bizhawk_ctx, [(0x3FD90, 21, "PRG ROM"),
                                                                (0x3FDA6, 3, "PRG ROM")]))
             if game_name[:3] != b"MM5" or version != bytes(MM5World.world_version):
+                logger.warning(f"game name = {game_name[:3]}")
                 if game_name[:3] == b"MM5":
                     # I think this is an easier check than the other?
                     older_version = f"{version[0]}.{version[1]}.{version[2]}"
@@ -312,6 +313,7 @@ class MegaMan5Client(BizHawkClient):
                                    f"Please use that version to connect instead.\n"
                                    f"Patch version: ({older_version})\n"
                                    f"Client version: ({'.'.join([str(i) for i in MM5World.world_version])})")
+                logger.warning(f"this line")
                 if "pool" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("pool")
                 if "request" in ctx.command_processor.commands:
@@ -330,13 +332,14 @@ class MegaMan5Client(BizHawkClient):
         self.rom = game_name
         ctx.items_handling = 0b111
         ctx.want_slot_data = False
-        deathlink = (await read(ctx.bizhawk_ctx, [(0x3DFA5, 1, "PRG ROM")]))[0][0]
+        deathlink = (await read(ctx.bizhawk_ctx, [(0x3FDA5, 1, "PRG ROM")]))[0][0]
         if deathlink & 0x01:
             self.death_link = True
             await ctx.update_death_link(self.death_link)
         if deathlink & 0x02:
             self.energy_link = True
 
+        logger.warning(f"energylink : {self.energy_link} , deathlink : {deathlink}")
         if self.energy_link:
             if "pool" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["pool"] = cmd_pool
