@@ -68,47 +68,47 @@ org 6
 ; We need to edit the NES 2.0 header here too
 db $40, $00, $00, $00, $00, $00, $00, $00, $00, $00
 
-;%org($80C0, $01)
-    ;JMP     WeaponSoftlock
-    ;NOP
-    ;NOP
-    ;NOP
-    ;NOP
-   
-;%org($8C60, $01)
-;WeaponSoftlock:
-    ;ADC     $858A,Y
-    ;STA     $50
-    ;LDX     $50
-    ;PHA
-    ;TYA 
-    ;PHA
-    ;ORA     #$05
-    ;TAY
-    ;DEX
-    ;DEX
-    ;DEY
-    ;.Loop
-    ;LDY     $8594, X
-    ;LDA     $B0, X
-    ;BNE     .ContinueTrue
-    ;DEX
-    ;DEY
-    ;CPY     #$05
-    ;BNE     .Loop
+%org($80D1, $01)
+    JMP     WeaponSoftlock
+
+
+%org($8C60, $01)
+WeaponSoftlock:
+    LDA     $8594,X
+    TAX
+    LDA     $B0,X
+    BMI     .SkipTrue
+    TXA
+    CMP     #$06
+    BMI     .CheckFile
+    LDA     #$08
+    TAY
+    JMP     .Loop
+    .CheckFile
+    LDA     #$00
+    TAY
+    .Loop
+    TYA
+    LDX     $8594, Y
+    LDA     $B0, X
+    BNE     .ContinueTrue
+    INY
+    CPY     #$08
+    BNE     .Loop
+    .ContinueFalse
     ; we're in the false case, jump out to a safe spot
-    ;LDA     #$00
-    ;STA     $0138
-    ;PLA
-    ;TAY
-    ;PLA
-    ;JMP     $80E1
-;.ContinueTrue:
+    LDA     #$00
+    STA     $50
+    PLA
+    TAY
+    PLA
+    JMP     $8111
+    .ContinueTrue:
     ; true case, pull and return
-    ;PLA
-    ;TAY
-    ;PLA
-    ;JMP     $80D1
+    STY     $50
+    JMP     $80E1
+    .SkipTrue
+    JMP     $80E1
 
 %org($8080, $0B)
     JMP     Wily3Requirement
@@ -564,4 +564,10 @@ EnableSaveRam:
 
 %org($FE60, $1F)
     JMP     EnableSaveRam
+    NOP
+
+%org($FEA6, $1F)
+    NOP     ; don't grant Rush Coil on startup
+    NOP
+    NOP
     NOP
